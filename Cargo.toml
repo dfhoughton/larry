@@ -1,0 +1,8 @@
+[package]
+name = "larry"
+version = "0.1.0"
+authors = ["dfhoughton <dfhoughton@gmail.com>"]
+description="handle files as lists of lines"
+license = "GPL-2.0"
+
+[dependencies]
