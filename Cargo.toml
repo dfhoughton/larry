@@ -2,7 +2,12 @@
 name = "larry"
 version = "0.1.0"
 authors = ["dfhoughton <dfhoughton@gmail.com>"]
-description="handle files as lists of lines"
+description="treat a file as a l(ine) arr(a)y"
+homepage = "https://github.com/dfhoughton/larry"
+repository = "https://github.com/dfhoughton/larry"
+readme = "README.md"
+keywords = [ "file", "log", "random access" ]
+categories = [ "filesystem" ]
 license = "GPL-2.0"
 
 [dependencies]
