@@ -33,6 +33,18 @@ fn simple_list_of_numbers() {
 }
 
 #[test]
+fn offset() {
+    let lines = ["1\n", "2\n", "3\n", "4\n", "5\n"];
+    fs::write("offset", lines.join("")).expect("could not write file");
+    if let Ok(larry) = Larry::new(Path::new("offset")) {
+        assert_eq!(8, larry.offset(4).unwrap());
+    } else {
+        assert!(false, "cannot create Larry");
+    }
+    fs::remove_file("offset").expect("could not delete file");
+}
+
+#[test]
 fn no_terminal_endline() {
     let lines = ["1\n", "5"];
     generic_test("no_terminal_endline", &lines);

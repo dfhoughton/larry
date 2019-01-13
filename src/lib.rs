@@ -144,7 +144,7 @@ impl Larry {
     /// let mut larry = Larry::new(Path::new("production.log"))?;
     /// // print the last line of the file
     /// let last_line_index = larry.len() - 1;
-    /// print!("{}", larry.get(last_line_index).unwrap());
+    /// print!("{}", larry.get(last_line_index)?);
     /// # Ok(()) }
     /// ```
     /// # Errors
@@ -177,6 +177,34 @@ impl Larry {
                     Ok(line.text.clone().unwrap())
                 }
             }
+        }
+    }
+    /// Returns the byte offset of line i from the start of the file.
+    ///
+    /// # Examples
+    /// ```
+    /// # use std::error::Error;
+    /// # fn demo() -> Result<(), Box<Error>> {
+    /// use larry::Larry;
+    /// use std::path::Path;
+    ///
+    /// let larry = Larry::new(Path::new("production.log"))?;
+    /// // print the last line of the file
+    /// let last_line_index = larry.len() - 1;
+    /// print!("{}", larry.offset(last_line_index)?);
+    /// # Ok(()) }
+    /// ```
+    /// # Errors
+    /// Index bound errors if you ask for a line beyond the end of the file
+    pub fn offset(&self, i: usize) -> Result<u64, String> {
+        if i >= self.lines.len() {
+            Err(format!(
+                "index {} in file of only {} lines",
+                i,
+                self.lines.len()
+            ))
+        } else {
+            Ok(self.lines[i].offset)
         }
     }
     /// Returns number of lines.
