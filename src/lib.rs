@@ -34,10 +34,13 @@ impl Larry {
     ///
     /// # Examples
     /// ```
+    /// # use std::error::Error;
+    /// # fn demo() -> Result<(), Box<Error>> {
     /// use larry::Larry;
     /// use std::path::Path;
     ///
-    /// let mut larry = Larry::new(Path::new("production.log"));
+    /// let mut larry = Larry::new(Path::new("production.log"))?;
+    /// # Ok(()) }
     /// ```
     /// # Errors
     /// Any `std::io::Error` arising while opening the file and scanning its contents
