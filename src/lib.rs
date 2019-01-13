@@ -133,11 +133,16 @@ impl Larry {
     ///
     /// # Examples
     /// ```
+    /// # use std::error::Error;
+    /// # fn demo() -> Result<(), Box<Error>> {
     /// use larry::Larry;
     /// use std::path::Path;
     ///
-    /// let mut larry = Larry::new(Path::new("production.log"));
-    /// print!("{}", larry.get(larry.len() - 1).unwrap()); // print the last line of the file
+    /// let mut larry = Larry::new(Path::new("production.log"))?;
+    /// // print the last line of the file
+    /// let last_line_index = larry.len() - 1;
+    /// print!("{}", larry.get(last_line_index).unwrap());
+    /// # Ok(()) }
     /// ```
     /// # Errors
     /// Index bound errors if you ask for a line beyond the end of the file and
@@ -175,11 +180,14 @@ impl Larry {
     ///
     /// # Examples
     /// ```
+    /// # use std::error::Error;
+    /// # fn demo() -> Result<(), Box<Error>> {
     /// use larry::Larry;
     /// use std::path::Path;
     ///
-    /// let mut larry = Larry::new(Path::new("production.log"));
+    /// let mut larry = Larry::new(Path::new("production.log"))?;
     /// println!("number of lines line: {}", larry.len());
+    /// # Ok(()) }
     /// ```
     pub fn len(&self) -> usize {
         self.lines.len()

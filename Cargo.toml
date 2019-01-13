@@ -1,6 +1,6 @@
 [package]
 name = "larry"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["dfhoughton <dfhoughton@gmail.com>"]
 description="treat a file as a l(ine) arr(a)y"
 homepage = "https://github.com/dfhoughton/larry"
