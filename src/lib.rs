@@ -1,3 +1,4 @@
+use std::fmt;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read, Seek, SeekFrom};
 use std::path::Path;
@@ -16,6 +17,24 @@ impl Line {
         self.text = Some(str::from_utf8(bytes).unwrap().to_string())
     }
 }
+
+/// An error made by Larry
+#[derive(Debug)]
+pub enum Lerror {
+    OutOfBounds(String),
+    IO(std::io::Error),
+}
+
+impl fmt::Display for Lerror {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Lerror::OutOfBounds(s) => write!(f, "Lerror::OutOfBounds({:?})", s),
+            Lerror::IO(err) => write!(f, "Lerror::IO({})", err),
+        }
+    }
+}
+
+impl std::error::Error for Lerror {}
 
 /// A `Larry` is a "line array". It allows one to access a file as a
 /// lazily-read array of lines. This allows efficient random access to large
@@ -150,16 +169,16 @@ impl Larry {
     /// # Errors
     /// Index bound errors if you ask for a line beyond the end of the file and
     /// IO errors if the file has changed since the larry was created.
-    pub fn get(&mut self, i: usize) -> Result<String, String> {
+    pub fn get(&mut self, i: usize) -> Result<&str, Lerror> {
         if i >= self.lines.len() {
-            Err(format!(
+            Err(Lerror::OutOfBounds(format!(
                 "index {} in file of only {} lines",
                 i,
                 self.lines.len()
-            ))
+            )))
         } else {
             if self.lines[i].text.is_some() {
-                Ok(self.lines[i].text.clone().unwrap())
+                Ok(self.lines[i].text.as_ref().unwrap())
             } else {
                 let length = if i == self.lines.len() - 1 {
                     self.length - self.lines[i].offset
@@ -169,12 +188,12 @@ impl Larry {
                 let line = &mut self.lines[i];
                 let mut buffer = vec![0; length as usize];
                 if let Err(io_err) = self.file.seek(SeekFrom::Start(line.offset)) {
-                    Err(io_err.to_string())
+                    Err(Lerror::IO(io_err))
                 } else if let Err(io_err) = self.file.read(&mut buffer) {
-                    Err(io_err.to_string())
+                    Err(Lerror::IO(io_err))
                 } else {
                     line.set_text(&buffer);
-                    Ok(line.text.clone().unwrap())
+                    Ok(line.text.as_ref().unwrap())
                 }
             }
         }
@@ -196,13 +215,13 @@ impl Larry {
     /// ```
     /// # Errors
     /// Index bound errors if you ask for a line beyond the end of the file
-    pub fn offset(&self, i: usize) -> Result<u64, String> {
+    pub fn offset(&self, i: usize) -> Result<u64, Lerror> {
         if i >= self.lines.len() {
-            Err(format!(
+            Err(Lerror::OutOfBounds(format!(
                 "index {} in file of only {} lines",
                 i,
                 self.lines.len()
-            ))
+            )))
         } else {
             Ok(self.lines[i].offset)
         }

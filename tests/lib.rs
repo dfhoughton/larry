@@ -10,7 +10,7 @@ fn generic_test(name: &str, lines: &[&str]) {
         assert_eq!(lines.len(), larry.len(), "counted lines in file");
         for (i, line) in lines.iter().enumerate() {
             if let Ok(l) = larry.get(i) {
-                assert_eq!(*line, l.as_str());
+                assert_eq!(*line, l);
             } else {
                 assert!(false, "could not get line");
             }
