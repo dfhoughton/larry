@@ -8,6 +8,6 @@ repository = "https://github.com/dfhoughton/larry"
 readme = "README.md"
 keywords = [ "file", "log" ]
 categories = [ "filesystem" ]
-license = "GPL-2.0"
+license = "MIT"
 
 [dependencies]
